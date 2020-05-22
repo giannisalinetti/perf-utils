@@ -10,6 +10,9 @@ The following packages are installed:
 - perf
 - bcc-tools
 - pcp
+- pcp-system-tools
+- pcp-pmda-trace
+- pcp-pmda-bcc
 - lsof
 - sysstat
 - tcpdump
@@ -18,6 +21,8 @@ The following packages are installed:
 - valgrind
 - dmidecode
 - elfutils
+- python3
+- pciutils
 
 ## How to run
 The perf-utils container must be executed as a privileged container. 
@@ -28,6 +33,10 @@ $ sudo podman run -it --rm \
   -v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /proc:/proc \
   quay.io/gbsalinetti/perf-utils
 ```
+
+### BCC Tools prerequisites
+To use the BCC tools the `kernel-devel` package, which contains kernel headers, 
+must be already installed in the host.
 
 ### Maintainers
 Gianni Salinetti <gsalinet@redhat.com>
