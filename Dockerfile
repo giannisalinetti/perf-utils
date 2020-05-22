@@ -1,7 +1,8 @@
 FROM docker.io/library/centos
 MAINTAINER Gianni Salinetti <gsalinet@redhat.com>
 
-RUN yum install -y perf bcc-tools sysstat pcp lsof tcpdump strace ltrace \
+RUN yum update -y && \
+    yum install -y perf bcc-tools sysstat pcp lsof tcpdump strace ltrace \
     valgrind dmidecode elfutils && \
     yum clean all -y
 

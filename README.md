@@ -20,8 +20,8 @@ The following packages are installed:
 - elfutils
 
 ## How to run
-The perf-utils container must be executed as a privileged container. To run it,
-use the `run.sh` script or the following:
+The perf-utils container must be executed as a privileged container. 
+To run it, use the `perf-utils` script or the following podman/docker command:
 ```
 $ sudo podman run -it --rm \
   --privileged --network=host --pid=host \

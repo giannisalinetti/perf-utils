@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Check root privileges
+if [ $UID -ne 0 ]; then
+    echo "perf-utils: fatal: this script must be run as root."
+    exit 1
+fi
+
+# Define command arguments
+ARGS="-it --rm --privileged --network=host --pid=host"
+MOUNTS="-v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /proc:/proc"
+IMG="quay.io/gbsalinetti/perf-utils"
+
+# Execute with the appropriate runtime
+if [ -x /usr/bin/podman ]; then
+    exec /usr/bin/podman run ${ARGS} ${MOUNTS} ${IMG}
+elif [ -x /usr/bin/docker]; then
+    exec /usr/bin/docker run ${ARGS} ${MOUNTS} ${IMG}
+else
+    echo "perf-utils: fatal: container runtime not installed"
+    exit 1
+fi
