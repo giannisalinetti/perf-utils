@@ -8,11 +8,9 @@ Perf-utils is based on CentOS base image.
 ## Installed Packages
 The following packages are installed:
 - perf
-- bcc-tools
 - pcp
 - pcp-system-tools
 - pcp-pmda-trace
-- pcp-pmda-bcc
 - lsof
 - sysstat
 - tcpdump
@@ -23,6 +21,13 @@ The following packages are installed:
 - elfutils
 - python3
 - pciutils
+
+# Compiled tools
+The following list of tools was directly compiled into the image:
+- bcc
+
+The bcc tools were directly compiled to make them usable on Linux kernels newer 
+than 5.4 (https://github.com/iovisor/bcc/issues/2546).
 
 ## How to run
 The perf-utils container must be executed as a privileged container. 
