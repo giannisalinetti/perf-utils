@@ -21,6 +21,9 @@ The following packages are installed:
 - lsof
 - sysstat
 - tcpdump
+- iotop
+- nmon
+- htop
 - strace
 - ltrace
 - valgrind

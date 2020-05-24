@@ -3,9 +3,10 @@ MAINTAINER Gianni Salinetti <gsalinet@redhat.com>
 
 # Install tools from CentOS Repos
 RUN yum update -y && \
-    yum install -y perf sysstat \
-        pcp pcp-system-tools pcp-pmda-trace \
-        python3 lsof tcpdump strace ltrace \
+    yum install -y epel-release && \
+    yum install -y \
+        perf sysstat pcp pcp-system-tools pcp-pmda-trace \
+        python3 lsof tcpdump strace ltrace iotop nmon htop \
         valgrind dmidecode elfutils pciutils man bind-utils && \
     yum clean all -y
 
@@ -13,8 +14,7 @@ RUN yum update -y && \
 RUN alternatives --set python /usr/bin/python3
 
 # Install dependencies to build bcc-tools
-RUN yum install -y epel-release && \
-    yum install -y elfutils-libelf-devel cmake ethtool git iperf3 libstdc++ \
+RUN yum install -y elfutils-libelf-devel cmake ethtool git iperf3 libstdc++ \
         libstdc++-devel bison flex ncurses-devel python3-netaddr python3-pip \
         gcc gcc-c++ make zlib-devel luajit luajit-devel clang clang-devel \
         llvm llvm-devel llvm-static && \
