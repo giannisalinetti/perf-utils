@@ -34,10 +34,10 @@ fi
 # is exectuted by the entrypoint script.
 if [[ -n $install_headers && $install_headers == "true" ]]; then
     ENV="-e install_headers=true"
-    MOUNTS="-v /lib/modules:/lib/modules:ro -v /proc:/proc"
+    MOUNTS="-v /lib/modules:/lib/modules:ro -v /proc:/proc -v /etc/passwd:/etc/passwd"
 else
     ENV=""
-    MOUNTS="-v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /proc:/proc"
+    MOUNTS="-v /lib/modules:/lib/modules:ro -v /proc:/proc -v /etc/passwd:/etc/passwd -v /usr/src:/usr/src:ro"
 fi
 
 # Define command arguments
