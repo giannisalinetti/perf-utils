@@ -28,6 +28,7 @@ The following packages are installed:
 - elfutils
 - python3
 - pciutils
+- bind-utils
 - man
 
 # Compiled tools

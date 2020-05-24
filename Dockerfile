@@ -6,7 +6,7 @@ RUN yum update -y && \
     yum install -y perf sysstat \
         pcp pcp-system-tools pcp-pmda-trace \
         python3 lsof tcpdump strace ltrace \
-        valgrind dmidecode elfutils pciutils man && \
+        valgrind dmidecode elfutils pciutils man bind-utils && \
     yum clean all -y
 
 # This is needed since bcc make invokes python executable name
