@@ -6,7 +6,7 @@ RUN yum update -y && \
     yum install -y perf sysstat \
         pcp pcp-system-tools pcp-pmda-trace \
         python3 lsof tcpdump strace ltrace \
-        valgrind dmidecode elfutils pciutils && \
+        valgrind dmidecode elfutils pciutils man && \
     yum clean all -y
 
 # This is needed since bcc make invokes python executable name
@@ -18,7 +18,7 @@ RUN yum install -y epel-release && \
         libstdc++-devel bison flex ncurses-devel python3-netaddr python3-pip \
         gcc gcc-c++ make zlib-devel luajit luajit-devel clang clang-devel \
         llvm llvm-devel llvm-static && \
-    yum clean all -y
+    yum clean all -y && rm -rf /var/cache/yum
 
 RUN pip3 -q install pyroute2
 

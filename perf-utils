@@ -1,4 +1,27 @@
 #!/bin/bash
+set -e -o pipefail
+
+case "$1" in
+    -h|--help)
+      # Print help 
+      echo -e "Usage:\n\nperf-utils [flags]"
+      echo -e "Flags:\n\n-h, --help\t\tPrint command help"
+      echo -e "--install-headers\tInstall kernel headers in the container"
+      exit 0
+      ;;
+    --install-headers)
+      # Set install_headers variable
+      install_headers=true
+      ;;
+    "")
+      # No flag
+      ;;
+    *)
+      # Any other wrong flag
+      echo -e "perf-utils: error: unknown flag"
+      exit 1
+      ;;
+esac
 
 # Check root privileges
 if [ $UID -ne 0 ]; then
@@ -6,16 +29,27 @@ if [ $UID -ne 0 ]; then
     exit 1
 fi
 
+# Option to install kernel headers in the container (needed by rhcos or fhcos
+# to use bcc tools). Container startup will take longer since the installation
+# is exectuted by the entrypoint script.
+if [[ -n $install_headers && $install_headers == "true" ]]; then
+    ENV="-e install_headers=true"
+    MOUNTS="-v /lib/modules:/lib/modules:ro -v /proc:/proc"
+else
+    ENV=""
+    MOUNTS="-v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /proc:/proc"
+fi
+
 # Define command arguments
 ARGS="-it --rm --privileged --network=host --pid=host"
-MOUNTS="-v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /proc:/proc"
 IMG="quay.io/gbsalinetti/perf-utils"
+TAG="latest"
 
 # Execute with the appropriate runtime
 if [ -x /usr/bin/podman ]; then
-    exec /usr/bin/podman run ${ARGS} ${MOUNTS} ${IMG}
+    exec /usr/bin/podman run ${ARGS} ${ENV} ${MOUNTS} ${IMG}:${TAG}
 elif [ -x /usr/bin/docker]; then
-    exec /usr/bin/docker run ${ARGS} ${MOUNTS} ${IMG}
+    exec /usr/bin/docker run ${ARGS} ${ENV} ${MOUNTS} ${IMG}:${TAG}
 else
     echo "perf-utils: fatal: container runtime not installed"
     exit 1
