@@ -7,7 +7,7 @@ RUN yum update -y && \
     yum install -y \
         perf sysstat pcp pcp-system-tools pcp-pmda-trace \
         python3 lsof tcpdump strace ltrace iotop nmon htop \
-        valgrind dmidecode elfutils pciutils man bind-utils && \
+        valgrind dmidecode elfutils pciutils man bind-utils fio && \
     yum clean all -y
 
 # This is needed since bcc make invokes python executable name
@@ -32,7 +32,7 @@ RUN git clone https://github.com/iovisor/bcc.git && \
     cd / && \
     rm -rf /bcc
 
-COPY entrypoint.sh /
+COPY entrypoint.sh pmcd_service.sh /
 RUN chmod +x /entrypoint.sh
 
 WORKDIR /

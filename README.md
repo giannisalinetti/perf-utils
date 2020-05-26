@@ -22,6 +22,7 @@ The following packages are installed:
 - sysstat
 - tcpdump
 - iotop
+- fio
 - nmon
 - htop
 - strace
