@@ -95,5 +95,19 @@ the haeders.
 
 Enjoy you bcc tools installed under `/usr/share/bcc/tools`!
 
+### PCP script
+Performance Co-Pilot runs the `pmcd` service in the background. While this is
+normally started by systemd, the perf-utils container has no init system and
+the daemon can be started manually using the file `/pmcd_service.sh`.
+To start the service:
+```
+# /pmcd_service.sh start
+```
+
+To stop the service:
+```
+# /pmcd_service.sh stop
+```
+
 ### Maintainers
 Gianni Salinetti <gsalinet@redhat.com>
