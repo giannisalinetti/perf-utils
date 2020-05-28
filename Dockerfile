@@ -33,6 +33,16 @@ RUN git clone https://github.com/iovisor/bcc.git && \
     cd / && \
     rm -rf /bcc
 
+# Build bpftrace
+RUN git clone https://github.com/iovisor/bpftrace && \
+    mkdir bpftrace/build && \
+    cd bpftrace/build && \
+    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    make -j8 && \
+    make install && \
+    cd / && \
+    rm -rf /bpftrace
+
 COPY entrypoint.sh pmcd_service.sh /
 RUN chmod +x /entrypoint.sh
 

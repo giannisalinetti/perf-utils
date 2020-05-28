@@ -42,6 +42,7 @@ The following packages are installed:
 # Compiled tools
 The following list of tools was directly compiled from master branch:
 - bcc
+- bpftrace
 
 The bcc tools were directly compiled to make them work on Linux kernels newer 
 than 5.4 (https://github.com/iovisor/bcc/issues/2546).
