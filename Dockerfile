@@ -7,7 +7,7 @@ RUN yum update -y && \
     yum install -y \
         perf sysstat pcp pcp-system-tools pcp-pmda-trace \
         python3 lsof tcpdump strace ltrace iotop nmon htop \
-        valgrind dmidecode elfutils pciutils man bind-utils fio && \
+        valgrind dmidecode elfutils pciutils man bind-utils fio \
         hdparm lvm2 iptables nftables && \
     yum clean all -y
 
