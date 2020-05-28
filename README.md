@@ -34,6 +34,10 @@ The following packages are installed:
 - pciutils
 - bind-utils
 - man
+- hdparm 
+- lvm2 
+- iptables 
+- nftables
 
 # Compiled tools
 The following list of tools was directly compiled from master branch:
