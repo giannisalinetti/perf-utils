@@ -41,7 +41,7 @@ else
 fi
 
 # Define command arguments
-ARGS="-it --rm --privileged --network=host --pid=host"
+ARGS="-it --rm --name perf-utils --privileged --network=host --pid=host"
 IMG="quay.io/gbsalinetti/perf-utils"
 TAG="latest"
 
