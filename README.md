@@ -114,5 +114,19 @@ To stop the service:
 # /pmcd_service.sh stop
 ```
 
+### Storage benchmark with fio
+Fio is a tool to benchmark storage IOPS and can be useful to evaluate disk 
+performances with etcd.
+This example of fio show a write to the `/mnt/rootdir` folder, which mounts
+the system root in the container:
+```
+# fio --rw=write --ioengine=sync --fdatasync=1 \
+--directory=/mnt/rootdir --size=22m --bs=2300 --name=fiotest
+```
+
+The output shows sync percentiles in usecs. One of the main etcd best practices is to 
+ensure that the `wal_fsync_duration_seconds` 99th percentile must be under
+10ms. The output of the fio command should be under 10000 usecs.
+
 ### Maintainers
 Gianni Salinetti <gsalinet@redhat.com>
