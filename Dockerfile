@@ -18,7 +18,7 @@ RUN alternatives --set python /usr/bin/python3
 RUN yum install -y elfutils-libelf-devel cmake ethtool git iperf3 libstdc++ \
         libstdc++-devel bison flex ncurses-devel python3-netaddr python3-pip \
         gcc gcc-c++ make zlib-devel luajit luajit-devel clang clang-devel \
-        llvm llvm-devel llvm-static && \
+        llvm llvm-devel llvm-static openssl && \
     yum clean all -y && rm -rf /var/cache/yum
 
 RUN pip3 -q install pyroute2
