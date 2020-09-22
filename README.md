@@ -53,7 +53,7 @@ To run the container directly from podman/docker CLI:
 ```
 $ sudo podman run -it --rm \
   --privileged --network=host --pid=host \
-  -v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /proc:/proc \
+  -v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /proc:/proc -v /:/mnt/rootdir \
   quay.io/gbsalinetti/perf-utils
 ```
 
@@ -77,7 +77,7 @@ mounting the `/usr/src` host directory:
 ```
 $ sudo podman run -it --rm \
   --privileged --network=host --pid=host \
-  -v /lib/modules:/lib/modules:ro -v /proc:/proc \
+  -v /lib/modules:/lib/modules:ro -v /proc:/proc -v /:/mnt/rootdir \
   quay.io/gbsalinetti/perf-utils
 ```
 
@@ -117,16 +117,33 @@ To stop the service:
 ### Storage benchmark with fio
 Fio is a tool to benchmark storage IOPS and can be useful to evaluate disk 
 performances with etcd.
-This example of fio show a write to the `/mnt/rootdir` folder, which mounts
-the system root in the container:
+This example of fio show a write/sync test on an RHCOS system. The directory 
+used is the /var/tmp of the system (which is writable) mount to the to the 
+`/mnt/rootdir/var/tmp` folder in the container:
 ```
 # fio --rw=write --ioengine=sync --fdatasync=1 \
---directory=/mnt/rootdir --size=22m --bs=2300 --name=fiotest
+--directory=/mnt/rootdir/var/tmp --size=22m --bs=2300 --name=fiotest
 ```
 
 The output shows sync percentiles in usecs. One of the main etcd best practices is to 
 ensure that the `wal_fsync_duration_seconds` 99th percentile must be under
-10ms. The output of the fio command should be under 10000 usecs.
+10ms. This means that etcd should take less than 10ms to write to the wal file,
+including both `write` and `fdatasync` syscalls. 
+
+The fio command example above simulates the sequential writes of etcd 
+(`--rw=write`) followed by fdatasync (`--fdatasync=1`). The size value is an
+approximazione of an etcd write to the wal file.
+Update the size accordingly to the average write value of you cluster (write
+syscall returns the written bytes in ssize_t format). The following example
+uses strace to track down writes to wal files.
+```
+# strace -p <etcd_pid> -f -e write,fdatasync -yy 2>&1 | grep '\.wal'
+```
+
+The output of the fsync/fdatasync from the fio command should be under 10000 usecs.
+
+If the system is already running a consistent workload (like an etcd instance) 
+the output of the fsyncs will be greater.
 
 ### Maintainers
 Gianni Salinetti <gsalinet@redhat.com>
