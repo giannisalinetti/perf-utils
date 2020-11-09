@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    openshift.io/scc: privileged
+  name: {{ .Values.nodeName }}-perfutils
+spec:
+  containers:
+  - command:
+    - /bin/bash
+    image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+    imagePullPolicy: {{ .Values.image.pullPolicy }}
+    name: {{ .Values.nodeName }}-perfutils
+    resources: {}
+    securityContext:
+      privileged: true
+      runAsUser: 0
+    stdin: true
+    stdinOnce: true
+    tty: true
+    volumeMounts:
+    - mountPath: /host
+      name: host
+  enableServiceLinks: true
+  hostNetwork: true
+  hostPID: true
+  nodeName: {{ .Values.nodeName }}
+  priority: 0
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - hostPath:
+      path: /
+      type: Directory
+    name: host
+

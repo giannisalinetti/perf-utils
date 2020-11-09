@@ -145,5 +145,32 @@ The output of the fsync/fdatasync from the fio command should be under 10000 use
 If the system is already running a consistent workload (like an etcd instance) 
 the output of the fsyncs will be greater.
 
+
+### Running on OpenShift
+The provided Helm charts is a useful tool to run a perf-utils pod in OpenShift
+with a parametric approach to dynamically provide the node name. You must have 
+**cluster-admin** privileges on your cluster.
+
+To install the chart with custom *noodeName*:
+```
+$ helm install ./helm/perf-utils --set nodeName=master-0 --generate-name
+```
+
+Once started you will notice a pod running in the namespace:
+```
+$ oc get pods
+NAME                 READY   STATUS    RESTARTS   AGE
+master-0-perfutils   1/1     Running   0          7s
+```
+
+You can run `oc rsh` or `oc exec` to run a shell in the container and 
+execute commands.
+```
+$ oc exec -it master-0-perfutils /bin/bash
+```
+
+By default the chart sets the host root file system mount point under the `/host` 
+folder.
+
 ### Maintainers
 Gianni Salinetti <gsalinet@redhat.com>
