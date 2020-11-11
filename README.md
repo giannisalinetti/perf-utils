@@ -172,5 +172,47 @@ $ oc exec -it master-0-perfutils /bin/bash
 By default the chart sets the host root file system mount point under the `/host` 
 folder.
 
+### Other OpenShift examples
+It is possible to run specific commands using the perf-utils image. 
+The `openshift_examples` contains some examples of targeted executions.
+After running the pod, outputs can be collected with the `oc logs` command:
+```
+$ oc apply -f openshift-examples/fio_pod.yaml 
+pod/master-0-bench created
+
+$ oc get pods
+NAME               READY   STATUS      RESTARTS   AGE
+fio-sample-f2z2f   0/1     Completed   0          65m
+master-0-bench     1/1     Running     0          2s
+
+$ oc logs master-0-bench 
+randwrite: (g=0): rw=randwrite, bs=(R) 4096KiB-4096KiB, (W) 4096KiB-4096KiB, (T) 4096KiB-4096KiB, ioengine=psync, iodepth=1
+fio-3.7
+Starting 1 process
+randwrite: Laying out IO file (1 file / 256MiB)
+
+randwrite: (groupid=0, jobs=1): err= 0: pid=226392: Wed Nov 11 20:18:57 2020
+  write: IOPS=646, BW=2586MiB/s (2711MB/s)(256MiB/99msec)
+    clat (usec): min=1136, max=3151, avg=1450.59, stdev=364.09
+     lat (usec): min=1202, max=3261, avg=1530.18, stdev=378.18
+    clat percentiles (usec):
+     |  1.00th=[ 1139],  5.00th=[ 1205], 10.00th=[ 1205], 20.00th=[ 1237],
+     | 30.00th=[ 1270], 40.00th=[ 1303], 50.00th=[ 1336], 60.00th=[ 1369],
+     | 70.00th=[ 1434], 80.00th=[ 1549], 90.00th=[ 1860], 95.00th=[ 1958],
+     | 99.00th=[ 3163], 99.50th=[ 3163], 99.90th=[ 3163], 99.95th=[ 3163],
+     | 99.99th=[ 3163]
+  lat (msec)   : 2=95.31%, 4=4.69%
+  cpu          : usr=1.02%, sys=90.82%, ctx=73, majf=0, minf=7
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=0,64,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+  WRITE: bw=2586MiB/s (2711MB/s), 2586MiB/s-2586MiB/s (2711MB/s-2711MB/s), io=256MiB (268MB), run=99-99msec
+```
+
+
 ### Maintainers
 Gianni Salinetti <gsalinet@redhat.com>
