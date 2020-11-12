@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    job-name: fio-sample
+    name: fio-sample
+  name: fio-sample
+spec:
+  completions: 1
+  parallelism: 1
+  backofflimit: 0
+  template:
+    metadata:
+      labels:
+        job-name: fio-sample
+    spec:
+      containers:
+      - command:
+        - /bin/fio
+        args:
+        - --name=fsyncwrite
+        - --ioengine=sync
+        - --fdatasync=1
+        - --iodepth=1
+        - --rw=write
+        - --bs=4m 
+        - --size=22m
+        image: quay.io/gbsalinetti/perf-utils:latest
+        imagePullPolicy: IfNotPresent
+        name: perf-utils-00
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        stdin: true
+        stdinOnce: true
+        tty: true
+        volumeMounts:
+        - mountPath: /host
+          name: host
+      nodeName: master-0
+      priority: 0
+      restartPolicy: Never
+      securityContext: {}
+      serviceAccount: default
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+        tolerationSeconds: 300
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+        tolerationSeconds: 300
+      volumes:
+      - hostPath:
+          path: /
+          type: Directory
+        name: host
+

@@ -175,42 +175,58 @@ folder.
 ### Other OpenShift examples
 It is possible to run specific commands using the perf-utils image. 
 The `openshift_examples` contains some examples of targeted executions.
-After running the pod, outputs can be collected with the `oc logs` command:
+The `fio_job.yaml` file is an example of a Kubernetes Job that runs a fio
+benchmark good for testing etcd performances.
+
+Before creating the Job, assign to the `default` service account of the project
+the **Privileged** SCC:
 ```
-$ oc apply -f openshift-examples/fio_pod.yaml 
+$ oc adm policy add-scc-to-user Privileged -z default
+```
+
+After creating the job the pod is executed and outputs can be collected with the `oc logs` command:
+```
+$ oc apply -f openshift-examples/fio_job.yaml 
 pod/master-0-bench created
 
 $ oc get pods
 NAME               READY   STATUS      RESTARTS   AGE
-fio-sample-f2z2f   0/1     Completed   0          65m
-master-0-bench     1/1     Running     0          2s
+fio-sample-lcjsg   0/1     Completed   0          28m
 
-$ oc logs master-0-bench 
-randwrite: (g=0): rw=randwrite, bs=(R) 4096KiB-4096KiB, (W) 4096KiB-4096KiB, (T) 4096KiB-4096KiB, ioengine=psync, iodepth=1
+$ oc logs fio-sample-lcjsg
+fsyncwrite: (g=0): rw=write, bs=(R) 4096KiB-4096KiB, (W) 4096KiB-4096KiB, (T) 4096KiB-4096KiB, ioengine=sync, iodepth=1
 fio-3.7
 Starting 1 process
-randwrite: Laying out IO file (1 file / 256MiB)
+fsyncwrite: Laying out IO file (1 file / 22MiB)
 
-randwrite: (groupid=0, jobs=1): err= 0: pid=226392: Wed Nov 11 20:18:57 2020
-  write: IOPS=646, BW=2586MiB/s (2711MB/s)(256MiB/99msec)
-    clat (usec): min=1136, max=3151, avg=1450.59, stdev=364.09
-     lat (usec): min=1202, max=3261, avg=1530.18, stdev=378.18
+fsyncwrite: (groupid=0, jobs=1): err= 0: pid=8: Thu Nov 12 17:37:09 2020
+  write: IOPS=48, BW=192MiB/s (202MB/s)(20.0MiB/104msec)
+    clat (usec): min=1718, max=4066, avg=2350.51, stdev=978.89
+     lat (usec): min=1856, max=4163, avg=2536.22, stdev=947.18
     clat percentiles (usec):
-     |  1.00th=[ 1139],  5.00th=[ 1205], 10.00th=[ 1205], 20.00th=[ 1237],
-     | 30.00th=[ 1270], 40.00th=[ 1303], 50.00th=[ 1336], 60.00th=[ 1369],
-     | 70.00th=[ 1434], 80.00th=[ 1549], 90.00th=[ 1860], 95.00th=[ 1958],
-     | 99.00th=[ 3163], 99.50th=[ 3163], 99.90th=[ 3163], 99.95th=[ 3163],
-     | 99.99th=[ 3163]
-  lat (msec)   : 2=95.31%, 4=4.69%
-  cpu          : usr=1.02%, sys=90.82%, ctx=73, majf=0, minf=7
-  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     |  1.00th=[ 1713],  5.00th=[ 1713], 10.00th=[ 1713], 20.00th=[ 1713],
+     | 30.00th=[ 1778], 40.00th=[ 1778], 50.00th=[ 1975], 60.00th=[ 1975],
+     | 70.00th=[ 2212], 80.00th=[ 2212], 90.00th=[ 4080], 95.00th=[ 4080],
+     | 99.00th=[ 4080], 99.50th=[ 4080], 99.90th=[ 4080], 99.95th=[ 4080],
+     | 99.99th=[ 4080]
+  lat (msec)   : 2=60.00%, 4=20.00%, 10=20.00%
+  fsync/fdatasync/sync_file_range:
+    sync (usec): min=12990, max=31657, avg=18097.90, stdev=7729.29
+    sync percentiles (usec):
+     |  1.00th=[13042],  5.00th=[13042], 10.00th=[13042], 20.00th=[13042],
+     | 30.00th=[14222], 40.00th=[14222], 50.00th=[14484], 60.00th=[14484],
+     | 70.00th=[17171], 80.00th=[17171], 90.00th=[31589], 95.00th=[31589],
+     | 99.00th=[31589], 99.50th=[31589], 99.90th=[31589], 99.95th=[31589],
+     | 99.99th=[31589]
+  cpu          : usr=1.94%, sys=10.68%, ctx=59, majf=0, minf=12
+  IO depths    : 1=200.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
      submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
      complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
-     issued rwts: total=0,64,0,0 short=0,0,0,0 dropped=0,0,0,0
+     issued rwts: total=0,5,0,0 short=5,0,0,0 dropped=0,0,0,0
      latency   : target=0, window=0, percentile=100.00%, depth=1
 
 Run status group 0 (all jobs):
-  WRITE: bw=2586MiB/s (2711MB/s), 2586MiB/s-2586MiB/s (2711MB/s-2711MB/s), io=256MiB (268MB), run=99-99msec
+  WRITE: bw=192MiB/s (202MB/s), 192MiB/s-192MiB/s (202MB/s-202MB/s), io=20.0MiB (20.0MB), run=104-104msec
 ```
 
 
