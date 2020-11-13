@@ -147,6 +147,13 @@ the output of the fsyncs will be greater.
 
 
 ### Running on OpenShift
+The preferred approach to run perf-utils is by using the 
+[perfutils-operator](https://github.com/giannisalinetti/perfutils-operator), 
+which provides, along with a generic perf-utils pods, other specialized 
+Custom Resource Definitions which can be used to run commands on targed 
+nodes, for example `fio`.
+
+When the operator is not an option users can install the image using **Helm**.
 The provided Helm charts is a useful tool to run a perf-utils pod in OpenShift
 with a parametric approach to dynamically provide the node name. You must have 
 **cluster-admin** privileges on your cluster.
@@ -184,6 +191,8 @@ the **Privileged** SCC:
 $ oc adm policy add-scc-to-user Privileged -z default
 ```
 
+Update the `nodeName` field in the manifest before running (**TODO**: deliver
+services as CRD with perfutils-operator).
 After creating the job the pod is executed and outputs can be collected with the `oc logs` command:
 ```
 $ oc apply -f openshift-examples/fio_job.yaml 
