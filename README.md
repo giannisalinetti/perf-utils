@@ -38,14 +38,12 @@ The following packages are installed:
 - lvm2 
 - iptables 
 - nftables
+- warp
+- bpftrace
 
 # Compiled tools
 The following list of tools was directly compiled from master branch:
-- bcc
-- bpftrace
-
-The bcc tools were directly compiled to make them work on Linux kernels newer 
-than 5.4 (https://github.com/iovisor/bcc/issues/2546).
+- libbpf-tools (libpf CO-RE compiled bcc-tools)
 
 ## How to run
 The perf-utils container must be executed as a privileged container. 
@@ -62,14 +60,6 @@ container in a simple and fast way:
 ```
 $ sudo ./perf-utils
 ```
-
-### BCC Tools limitations
-To use the BCC tools the `kernel-devel` package, which contains kernel headers, 
-must be already installed in the host. 
-On production system or distributions like like Red Hat CoreOS, 
-which are engineered to be the nodes of OpenShift clusters and are minimal by default.
-
-To workaound this issue, you can use two different approaches.
 
 #### Approach 1: Manual container creation
 If you choose to freely run your contianer, first start the container without 

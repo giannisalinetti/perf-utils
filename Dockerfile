@@ -19,7 +19,13 @@ RUN wget -O /tmp/bcc.tar.gz https://github.com/iovisor/bcc/releases/download/v0.
     sh -c 'find /tmp/bcc/libbpf-tools/ -type l -name *dist -o -name *lower -exec mv {} /usr/local/bin/ \;' && \
     rm -rf /tmp/bcc*
 
-# Install tools from CentOS Repos
+# Install Warp binary release
+RUN wget -O /tmp/warp_0.5.0_Linux_x86_64.tar.gz https://github.com/minio/warp/releases/download/v0.5.0/warp_0.5.0_Linux_x86_64.tar.gz && \
+    tar --no-same-owner -zxvf /tmp/warp_0.5.0_Linux_x86_64.tar.gz -C /tmp && \
+    mv /tmp/warp /usr/local/bin && \
+    rm -rf /tmp/warp_logo.png /tmp/LICENSE /tmp/README.md
+
+# Install performance and troubleshooting tools
 RUN  dnf install -y \
         perf sysstat pcp pcp-system-tools pcp-pmda-trace \
         python3 lsof tcpdump strace ltrace iotop nmon htop \
