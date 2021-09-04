@@ -30,7 +30,7 @@ COPY --from=0 /tmp/bcc_build_output/* /usr/local/bin/
 
 # Install performance and troubleshooting tools
 RUN  dnf install -y \
-        wget ethtool wireless-tools iperf3 perf sysstat pcp pcp-system-tools pcp-pmda-trace \
+        iproute wget ethtool wireless-tools iperf3 perf sysstat pcp pcp-system-tools pcp-pmda-trace \
         python3 lsof tcpdump strace ltrace iotop nmon htop iptraf-ng net-tools iftop \
         glances valgrind dmidecode elfutils pciutils man bind-utils fio \
         flamegraph flamegraph-stackcollapse.noarch flamegraph-stackcollapse-perf.noarch \

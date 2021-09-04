@@ -44,6 +44,7 @@ The following packages are installed:
 - wireless-tools
 - flamegraph
 - net-tools
+- iproute
 - iftop
 - glances
 
