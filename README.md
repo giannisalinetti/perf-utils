@@ -40,6 +40,12 @@ The following packages are installed:
 - nftables
 - warp
 - bpftrace
+- iptraf
+- wireless-tools
+- flamegraph
+- net-tools
+- iftop
+- glances
 
 # Compiled tools
 The following list of tools was directly compiled from master branch:
