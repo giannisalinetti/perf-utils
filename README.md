@@ -47,6 +47,7 @@ The following packages are installed:
 - iproute
 - iftop
 - glances
+- httpd-tools
 
 # Compiled tools
 The following list of tools was directly compiled from master branch:

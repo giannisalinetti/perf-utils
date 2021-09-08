@@ -34,7 +34,7 @@ RUN  dnf install -y \
         python3 lsof tcpdump strace ltrace iotop nmon htop iptraf-ng net-tools iftop \
         glances valgrind dmidecode elfutils pciutils man bind-utils fio \
         flamegraph flamegraph-stackcollapse.noarch flamegraph-stackcollapse-perf.noarch \
-        hdparm lvm2 iptables nftables bpftrace && \
+        hdparm lvm2 iptables nftables bpftrace httpd-tools && \
     dnf clean all -y
 
 # Install Warp binary release
