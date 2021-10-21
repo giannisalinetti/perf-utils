@@ -8,6 +8,8 @@ image:
   pullPolicy: IfNotPresent
 
 nodeName: ""
+hostNetwork: true
+hostPid: true
 
 securityContext: {}
   # capabilities:

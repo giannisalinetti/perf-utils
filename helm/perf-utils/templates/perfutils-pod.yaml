@@ -22,8 +22,8 @@ spec:
     - mountPath: /host
       name: host
   enableServiceLinks: true
-  hostNetwork: true
-  hostPID: true
+  hostNetwork: {{ .Values.hostNetwork }}
+  hostPID: {{ .Values.hostPid }}
   nodeName: {{ .Values.nodeName }}
   priority: 0
   securityContext: {}
