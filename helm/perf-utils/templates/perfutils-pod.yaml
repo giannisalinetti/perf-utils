@@ -3,14 +3,14 @@ kind: Pod
 metadata:
   annotations:
     openshift.io/scc: privileged
-  name: name: {{ regexReplaceAll "\\W+" .Values.nodeName "-" }}-perfutils
+  name: {{ regexReplaceAll "\\W+" .Values.nodeName "-" }}-perfutils
 spec:
   containers:
   - command:
     - /bin/bash
     image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
     imagePullPolicy: {{ .Values.image.pullPolicy }}
-    name: name: {{ regexReplaceAll "\\W+" .Values.nodeName "-" }}-perfutils
+    name: {{ regexReplaceAll "\\W+" .Values.nodeName "-" }}-perfutils
     resources: {}
     securityContext:
       privileged: true
